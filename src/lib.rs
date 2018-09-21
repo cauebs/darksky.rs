@@ -56,7 +56,7 @@
 //! #
 //! use darksky::DarkskyHyperRequester;
 //! use futures::Future;
-//! use hyper::client::{Client, HttpConnector};
+//! use hyper::{Body, client::{Client, HttpConnector}};
 //! use hyper_tls::HttpsConnector;
 //! use std::env;
 //! use tokio_core::reactor::Core;
@@ -65,9 +65,8 @@
 //! let core = Core::new()?;
 //! let handle = core.handle();
 //!
-//! let client = Client::configure()
-//!     .connector(HttpsConnector::new(4, &handle)?)
-//!     .build(&handle);
+//! let client = Client::builder()
+//!     .build::<_, Body>(HttpsConnector::new(4).unwrap());
 //!
 //! let token = env::var("FORECAST_TOKEN")?;
 //! let lat = 37.8267;

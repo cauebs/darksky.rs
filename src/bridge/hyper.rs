@@ -44,18 +44,15 @@ pub trait DarkskyHyperRequester {
     /// #
     /// use darksky::{DarkskyHyperRequester, Block};
     /// use futures::Future;
-    /// use hyper::client::{Client, HttpConnector};
+    /// use hyper::{Body, client::{Client, HttpConnector}};
     /// use hyper_tls::HttpsConnector;
     /// use std::env;
     /// use tokio_core::reactor::Core;
     ///
     /// # fn try_main() -> Result<(), Box<Error>> {
     /// let core = Core::new()?;
-    /// let handle = core.handle();
-    ///
-    /// let client = Client::configure()
-    ///     .connector(HttpsConnector::new(4, &handle)?)
-    ///     .build(&handle);
+    /// let client = Client::builder()
+    ///     .build::<_, Body>(HttpsConnector::new(4).unwrap());
     ///
     /// let token = env::var("FORECAST_TOKEN")?;
     /// let lat = 37.8267;
@@ -102,18 +99,16 @@ pub trait DarkskyHyperRequester {
     /// #
     /// use darksky::{DarkskyHyperRequester, Block};
     /// use futures::Future;
-    /// use hyper::client::{Client, HttpConnector};
+    /// use hyper::{Body, client::{Client, HttpConnector}};
     /// use hyper_tls::HttpsConnector;
     /// use std::env;
     /// use tokio_core::reactor::Core;
     ///
     /// # fn try_main() -> Result<(), Box<Error>> {
     /// let core = Core::new()?;
-    /// let handle = core.handle();
     ///
-    /// let client = Client::configure()
-    ///     .connector(HttpsConnector::new(4, &handle)?)
-    ///     .build(&handle);
+    /// let client = Client::builder()
+    ///     .build::<_, Body>(HttpsConnector::new(4).unwrap());
     ///
     /// let token = env::var("FORECAST_TOKEN").expect("forecast token");
     /// let lat = 37.8267;

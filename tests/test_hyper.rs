@@ -12,15 +12,12 @@ use futures::{future, Future};
 use hyper::client::HttpConnector;
 use hyper::{Body, Client};
 use hyper_tls::HttpsConnector;
-use std::time::Duration;
-use std::{env, thread};
-use tokio_core::reactor::{Core, Handle};
+use std::env;
+use tokio_core::reactor::Core;
 
 #[inline]
-fn client(handle: &Handle) -> Client<HttpsConnector<HttpConnector>, Body> {
-    Client::configure()
-        .connector(HttpsConnector::new(4, handle).unwrap())
-        .build(handle)
+fn client() -> Client<HttpsConnector<HttpConnector>, Body> {
+    Client::builder().build(HttpsConnector::new(4).unwrap())
 }
 
 #[ignore]
@@ -29,7 +26,7 @@ fn test_get_forecast() {
     let token = env::var("FORECAST_TOKEN").expect("forecast token");
 
     let mut core = Core::new().unwrap();
-    let client = client(&core.handle());
+    let client = client();
 
     let futures = vec![
         client.get_forecast(&token[..], 37.8267, -122.423),
@@ -57,7 +54,7 @@ fn test_get_forecast_with_options() {
     let token = env::var("FORECAST_TOKEN").expect("forecast token");
 
     let mut core = Core::new().unwrap();
-    let client = client(&core.handle());
+    let client = client();
 
     let done = client
         .get_forecast_with_options(&token[..], 19.2465, -99.1013, |opt| {
@@ -84,7 +81,7 @@ fn test_time_machine() {
     let token = env::var("FORECAST_TOKEN").expect("forecast token");
 
     let mut core = Core::new().unwrap();
-    let client = client(&core.handle());
+    let client = client();
 
     let done = client
         .get_forecast_time_machine(&token[..], 19.2465, -99.1013, 1_450_000_000, |opt| {
@@ -92,7 +89,7 @@ fn test_time_machine() {
                 .extend_hourly()
                 .language(Language::Es)
                 .unit(Unit::Si)
-        }).map(|forecast| {
+        }).map(|_forecast| {
             assert!(true);
 
             ()
