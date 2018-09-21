@@ -21,7 +21,9 @@ use std::io::Error as IoError;
 use std::result::Result as StdResult;
 
 #[cfg(feature = "hyper")]
-use hyper::error::{Error as HyperError, UriError};
+use http::uri::InvalidUri;
+#[cfg(feature = "hyper")]
+use hyper::error::{Error as HyperError};
 #[cfg(feature = "reqwest")]
 use reqwest::Error as ReqwestError;
 
@@ -51,7 +53,7 @@ pub enum Error {
 	Reqwest(ReqwestError),
 	/// An error while parsing a URI.
 	#[cfg(feature = "hyper")]
-	Uri(UriError),
+	Uri(InvalidUri),
 }
 
 impl From<FmtError> for Error {

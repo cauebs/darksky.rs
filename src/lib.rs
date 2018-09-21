@@ -111,6 +111,8 @@ extern crate serde_json;
 extern crate futures;
 #[cfg(feature = "hyper")]
 extern crate hyper;
+#[cfg(feature = "hyper")]
+extern crate http;
 #[cfg(feature = "reqwest")]
 extern crate reqwest;
 
